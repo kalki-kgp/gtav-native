@@ -1,0 +1,20 @@
+# generated from game.wasm by scripts/gen.sh: the game's own code, never committed
+gen/
+# build output, logs, saves
+build/
+run/
+userdata/
+ios/*/build/
+tools/dawn-ios-build.log
+# downloaded or cloned third-party trees (see README: wabt and Dawn, with patches/)
+tools/wabt/
+tools/dawn/
+tools/dawn-src/
+# written by `xcodegen generate`
+ios/*/*.xcodeproj/
+# your Apple team id: copy Local.xcconfig.example
+ios/*/Local.xcconfig
+# game shaders and artwork
+ios/probe/Resources/
+ios/app/App/Assets.xcassets/AppIcon.appiconset/*.png
+.DS_Store

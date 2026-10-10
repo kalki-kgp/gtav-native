@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>StringsTable</key><string>Root</string>
+  <key>PreferenceSpecifiers</key>
+  <array>
+    <dict>
+      <key>Type</key><string>PSGroupSpecifier</string>
+      <key>FooterText</key><string>Takes effect the next time the game starts.</string>
+    </dict>
+    <dict>
+      <key>Type</key><string>PSMultiValueSpecifier</string>
+      <key>Title</key><string>Frame rate</string>
+      <key>Key</key><string>fps</string>
+      <key>DefaultValue</key><integer>60</integer>
+      <key>Titles</key><array><string>60 fps</string><string>30 fps</string></array>
+      <key>Values</key><array><integer>60</integer><integer>30</integer></array>
+    </dict>
+    <dict>
+      <key>Type</key><string>PSMultiValueSpecifier</string>
+      <key>Title</key><string>Picture height</string>
+      <key>Key</key><string>height</string>
+      <key>DefaultValue</key><integer>640</integer>
+      <key>Titles</key><array><string>480</string><string>540</string><string>640</string><string>720</string></array>
+      <key>Values</key><array><integer>480</integer><integer>540</integer><integer>640</integer><integer>720</integer></array>
+    </dict>
+  </array>
+</dict>
+</plist>

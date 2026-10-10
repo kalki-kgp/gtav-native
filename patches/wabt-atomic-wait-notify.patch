@@ -1,0 +1,44 @@
+diff --git a/src/c-writer.cc b/src/c-writer.cc
+index 7053088..7c24c96 100644
+--- a/src/c-writer.cc
++++ b/src/c-writer.cc
+@@ -4409,8 +4409,37 @@ void CWriter::Write(const ExprList& exprs) {
+         return;
+       }
+ 
+-      case ExprType::AtomicWait:
+-      case ExprType::AtomicNotify:
++      // Local patch: wait/notify are forwarded to host functions the embedder
++      // provides (w2c_host_atomic_wait32/wait64/notify).
++      case ExprType::AtomicWait: {
++        const auto* wait = cast<AtomicWaitExpr>(&expr);
++        Memory* memory =
++            module_->memories[module_->GetMemoryIndex(wait->memidx)];
++        const char* func = wait->opcode == Opcode::MemoryAtomicWait64
++                               ? "w2c_host_atomic_wait64"
++                               : "w2c_host_atomic_wait32";
++        Write(StackVar(2, Type::I32), " = ", func, "(");
++        Write(ExternalInstancePtr(ModuleFieldType::Memory, memory->name), ", ");
++        WriteMemoryAddress(2, memory, wait->offset);
++        Write(", ", StackVar(1), ", ", StackVar(0), ");", Newline());
++        DropTypes(3);
++        PushType(Type::I32);
++        break;
++      }
++
++      case ExprType::AtomicNotify: {
++        const auto* notify = cast<AtomicNotifyExpr>(&expr);
++        Memory* memory =
++            module_->memories[module_->GetMemoryIndex(notify->memidx)];
++        Write(StackVar(1, Type::I32), " = w2c_host_atomic_notify(");
++        Write(ExternalInstancePtr(ModuleFieldType::Memory, memory->name), ", ");
++        WriteMemoryAddress(1, memory, notify->offset);
++        Write(", ", StackVar(0), ");", Newline());
++        DropTypes(2);
++        PushType(Type::I32);
++        break;
++      }
++
+       case ExprType::CallRef:
+       case ExprType::ReturnCallRef:
+       case ExprType::Quaternary:

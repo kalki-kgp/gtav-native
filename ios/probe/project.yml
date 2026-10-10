@@ -1,0 +1,51 @@
+# XcodeGen spec: `xcodegen generate` writes GTAProbe.xcodeproj.
+# Device probe for the native port: GPU features, shader compilation and memory limits on the phone. No game code.
+name: GTAProbe
+options:
+  bundleIdPrefix: dev.kalki
+  deploymentTarget:
+    iOS: "26.0"
+configFiles:
+  Debug: Local.xcconfig
+  Release: Local.xcconfig
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1"
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: "NO"
+    CLANG_CXX_LANGUAGE_STANDARD: "c++20"
+    HEADER_SEARCH_PATHS: "$(SRCROOT)/../../tools/dawn/headers/dawn-headers/include"
+    GCC_OPTIMIZATION_LEVEL: "2"
+targets:
+  GTAProbe:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Resources/shaders
+        type: folder
+    dependencies:
+      - framework: ../../tools/dawn/dawn-apple-b73d662f73d57bb42209546910666a38e6db95a1.xcframework
+        embed: false
+      - sdk: Metal.framework
+      - sdk: QuartzCore.framework
+      - sdk: IOSurface.framework
+      - sdk: CoreGraphics.framework
+      - sdk: UIKit.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.kalki.gtaprobe
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: GTA Probe
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default
+                UISceneDelegateClassName: SceneDelegate
+    scheme: {}

@@ -1,0 +1,69 @@
+# XcodeGen spec: `xcodegen generate` writes GTA.xcodeproj.
+# The iPhone app: a thin UIKit shell around the engine library (make PLATFORM=ios -> build/ios/libgta.a).
+name: GTA
+options:
+  bundleIdPrefix: dev.kalki
+  deploymentTarget:
+    iOS: "26.0"
+configFiles:
+  Debug: Local.xcconfig
+  Release: Local.xcconfig
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1"
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: "NO"
+    GCC_OPTIMIZATION_LEVEL: "2"
+    HEADER_SEARCH_PATHS: "$(SRCROOT)/../../host"
+targets:
+  GTA:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+    dependencies:
+      - sdk: Metal.framework
+      - sdk: QuartzCore.framework
+      - sdk: IOSurface.framework
+      - sdk: CoreGraphics.framework
+      - sdk: UIKit.framework
+      - sdk: AudioToolbox.framework
+      - sdk: AVFAudio.framework
+      - sdk: GameController.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.kalki.gta
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # the engine + host (make PLATFORM=ios) and Dawn built with BC textures (tools/build-dawn-ios.sh)
+        OTHER_LDFLAGS:
+          - "$(SRCROOT)/../../build/ios/libgta.a"
+          - "$(SRCROOT)/../../tools/dawn-src/out/ios_arm64/src/dawn/native/libwebgpu_dawn.a"
+          - "-lc++"
+    entitlements:
+      path: App/GTA.entitlements
+      properties:
+        com.apple.developer.kernel.increased-memory-limit: true
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: GTA V
+        UILaunchScreen: {}
+        UIFileSharingEnabled: true
+        GCSupportsControllerUserInteraction: true
+        GCSupportedGameControllers:
+          - ProfileName: ExtendedGamepad
+        LSSupportsOpeningDocumentsInPlace: true
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationLandscapeLeft
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default
+                UISceneDelegateClassName: SceneDelegate
+    scheme: {}
