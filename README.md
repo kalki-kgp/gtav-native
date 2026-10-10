@@ -64,3 +64,8 @@ reinstalled every 7 days.
 | `patches/` | The wabt and Dawn patches |
 | `tests/` | Checks that every rewritten shader compiles |
 | `docs/` | Problems and fixes; the Metal renderer plan |
+
+## License
+
+MIT, see `LICENSE`. It covers the code in this repository only. The game, its data and its shaders belong to their owners
+and are not part of this project; wabt and Dawn are separate projects under their own licenses.
